@@ -1,0 +1,566 @@
+<?php
+// lucky_phone.php
+header('Content-Type: text/html; charset=utf-8');
+
+// Helper
+function esc($s){ return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); }
+
+// Generate a short "horoscope" message for index 1..80 (template-based)
+function horoscope_for($n){
+    $n = (int)$n;
+  
+    $advice = [
+        '	ល្អណាស់-រីកចំរើនល្អអាចទទួលបានជ័យជំនះ',
+        '	ធម្មតា-មានលាភមានបង់មិនទទួលផលអ្វីទេ',
+        '	ល្អណាស់	
+មានភាពរីកចំរើនអ្វីៗអាចសំរេចបានដូចបំណង ',
+'	អាក្រក់	
+ផ្លូវអនាគតមានឧបសគ្គច្រើនលំបាកវេទនា', 
+'	ល្អណាស់	
+រកស៊ីមានបានទទួលបានទាំងកិត្តិយសទាំងផលប្រយោជន៍ ',
+'	ល្អណាស់	
+មានសំណាងច្រើនអាចទទួលបានគុណសម្បត្តិធំ', 
+'	ល្អ	
+មានចិត្តអត់ធ្មត់ពិតជាអាចទទួលបានជោគជ័យដ៏ធំ', 
+'	ល្អ	
+អាចមានឳកាសទទួលបានជោគជ័យ ',
+'	អាក្រក់	
+ឯកកោរ គ្មានអ្នកជួយពិបាកទទួលទ្រព្យមកវិញ ',
+'	អាក្រក់	
+ខាតបង់ទឹកចិត្តនិងកម្លាំងទទេ ខិតខំដោយឥតបានផល ',
+'	ល្អ	
+មានលំនឹងល្អអ្នកដទៃស្ងើចសរសើរ ',
+'អាក្រក់	
+ទន់ខ្សោយធ្វើអ្វីក៏មិនបានសំរេចដែរ ',
+'	ល្អណាស់	
+មានសំណាង់ល្អក្តីសង្ឃឹមច្រើន', 
+
+'	ធម្មតា	
+ជ័យជំនះ ឬបរាជ័យពឹងផ្អែកលើការតាំងចិត្តរបស់ខ្លួន ',
+
+'ល្អ	
+ជ័យជំនះច្រើនមានការរីកចំរើន ',
+
+'	ល្អណាស់	
+អាចសំរេចកិច្ចការធំបានទទួលទាំងកិត្តិយសទាំងផលប្រយោជន៍ ',
+
+'	ល្អ	
+មានអ្នកធំជួយអាចទទួលបានជោគជ័យ', 
+
+'	ល្អ	
+មានភាពរីកចចម្រើននឹងបានសំរេចដូចបំណង ',
+
+'	អាក្រក់	
+មានទំនាស់ច្រើនមានឧបសគ្គគ្រប់ជំពូក ',
+
+'	អាក្រក់	
+ឧបសគ្គច្រើនឈឺច្រើនពិបាកចិត្តច្រើន ',
+
+'	ល្អ	
+ធ្វើការល្អិតល្អន់មានប្រាជ្ញា ',
+
+'	អាក្រក់ណាស់	
+ខាតបង់លាភធ្វើអ្វីក៏មិនបានសំរេចដូចបំណងដែរ ',
+
+'	ល្អណាស់	
+កិត្តិយសល្អសំរេចកិច្ចការធំបាន ',
+
+'	ល្អ	
+ពឹងផ្អែកលើសមត្តភាពផ្ទាល់ខ្លួនអាចសម្រេចកិច្ចការបាន ',
+
+'	ល្អណាស់	
+មានសំណាងល្អមានគេជួយ ',
+
+'	អាក្រក់ណាស់	
+មានឧបសគ្គច្រើន ',
+
+'	ល្អ	
+អាចមានលាភសំណាងនិងជ័យជំនះ ',
+
+'	ល្អណាស់	
+រាសីឡើងខ្ពស់រកស៊ីមានបាន ',
+
+'	អាក្រក់	
+សំណាងល្អនិងអាក្រក់ កើតមានឡើងព្រមគ្នា ',
+
+'	ល្អណាស់	
+ទទួលបាននូវលាភសំណាងនិងកិត្តិយស ',
+
+'	ល្អណាស់	
+មានសំណាងអាចទទួលជោគជ័យ ',
+
+'	ល្អ	
+មានប្រាជ្ញាឈ្លាសវៃមានភាពរីកចម្រើនច្រើន ',
+
+'	អាក្រក់ណាស់	
+ជួបឧបសគ្គមិនចេះអស់ពិបាកនឹងទទួលបានជោគជ័យ ',
+
+'	ធម្មតា	
+ត្រូវមានលំនឹងចិត្តកុំលោភលន់ ',
+
+'	អាក្រក់	
+ឧបសគ្គច្រើនតែជួបភាពលំបាក និងក្រខ្សត់ ',
+
+'	ល្អ	
+ឧបសគ្គអាចក្លាយជាសំណាងធ្វើអ្វីៗអាចបានដូចបំណង ',
+
+'	ធម្មតា	
+អាចទទួលបាននូវកិត្តិយសតែពិបាកទទួលនូវលាភសំណាង ',
+
+'	ល្អណាស់	
+អនាគតភ្លឺស្វាងត្រចះត្រចង់ ',
+
+'	ធម្មតា	
+មានសំណាងឬឧបសគ្គមានមិនទៀង', 
+
+'	ល្អណាស់	
+មានសំណាងល្អអនាគតល្អហើយភ្លឺស្វាង ត្រចះត្រចង់ ',
+
+'	អាក្រក់	
+ការរកស៊ីត្រូវខាតបង់ ',
+
+'	ល្អ	
+បើមានចិត្តអត់ធ្មត់សំណាងអាក្រក់ អាចក្លាយជាមានលាភ ',
+
+'	អាក្រក់	
+រឿងអ្វីៗពិបាកសម្រេចដូចបំណងប្រាថ្នា', 
+
+'	ល្អ	
+មានសំណាងមានភាពរីកចម្រើន ',
+
+'	ល្អណាស់	
+ជួបឧបសគ្គ មិនចេះអស់ (ចំណាំ៖ ក្នុងឯកសារដាក់ថា "ល្អណាស់" តែអត្ថន័យអវិជ្ជមាន) ',
+
+'	ល្អណាស់	
+មានគេតាមជួយថែរក្សា អាចប្រកបមុខជំនួញបាន ',
+
+'	ល្អណាស់	
+មានទាំងកិត្តិយសមានទាំងទ្រព្យសម្បត្តិ ',
+
+'	ធម្មតា	
+មានឧបសគ្គហើយក៏មានសំណាងដែរ ',
+
+'	ធម្មតា	
+មានឧបសគ្គហើយក៏មានសំណាងដែរ', 
+
+'	ធម្មតា	
+លាភសំណាងនិងឧបសគ្គគឺមកមិនទៀង', 
+
+'	ល្អ	
+ខិតខំនិងទទួលបានជោគជ័យ ',
+
+'	អាក្រក់	
+ពេលបានលាភសំណាងនិងមានឧបសគ្គតាមមកពីក្រោយ ',
+
+'	ធម្មតា	
+ខិតខំប្រឹងប្រែងខ្លាំងតែទទួលបានលទ្ធផលតិចតួច ',
+
+'	អាក្រក់	
+ល្អតែសំបកក្រៅតែតាមការពិតមានឧបសគ្គ និងគ្រោះថ្នាក់ ',
+
+'	អាក្រក់ណាស់	
+ជួបឧបសគ្គ មិនចេះអស់អាចមានគ្រោះថ្នាក់ ',
+
+'	ល្អ	
+ខិតខំប្រឹងប្រែងអាចកែប្រែនូវជោគវាសនា ',
+
+'	ធម្មតា	
+មានឧបសគ្គច្រើន តែសំណាងល្អនឹងមកពីក្រោយ ',
+
+'	អាក្រក់	
+ពេលជួបនិងបញ្ហាចិត្តមិត្តនឹងនរពិបាកសំរេចចិត្ត ',
+
+'	ធម្មតា	
+ចិត្តច្របូកច្របល់ពិបាកសំរេចចិត្ត ',
+
+'	អាក្រក់	
+ជួបឧបសគ្គច្រើន ',
+
+'	អាក្រក់	
+មានរឿងស្មុគស្មាញច្រើនពិបាកសំរេចអ្វីៗដែលបានប៉ងទុក ',
+
+'	ល្អ	
+ខិតខំនិងទទួលបាននូវផលប្រយោជន៍ ',
+
+'	អាក្រក់	
+ខឹងខំ តែគ្មានទទួលបានផលប្រយោជន៍អ្វីឡើយ ',
+
+'	ល្អ	
+មានសំណាងល្អអាចប្រកបមុខជំនួយបានធំបាន ',
+
+'	ធម្មតា	
+ល្អ តែខ្វះទំនុកចិត្តលើខ្លួនឯង ',
+
+'	ល្អណាស់	
+ធ្វើអ្វីៗតែងបានសំរេចមាសប្រាក់ហូរចូលច្រើន ',
+
+'	ល្អ	
+ប្រសិនបើអាចក្តាប់ជាប់នូវឱកាសល្អអាចទទួលបានជោគជំនះ ',
+
+'	អាក្រក់	
+ស្ថានភាពមិននឹងនរអាចចាញ់បោកគេជួបឧបសគ្គច្រើន ',
+
+'	អាក្រក់	
+រកស៊ីខាតបង់ជួបភាពច្របូកច្របល់និងឧបសគ្គ', 
+
+'	ធម្មតា	
+សំណាងល្អឬអាក្រក់អាស្រ័យលើភាពក្លាហាន ',
+
+'	អាក្រក់	
+បានហើយតែប្រែជាបាត់បង់ទៅវិញពិបាកសំរេចតាមបំណងណាស់ ',
+
+'	ល្អ	
+មានសុភមង្គលនិងសំណាងល្អ ',
+
+'	ធម្មតា	
+បើសិនជារុញរាពិបាកនិងទទួលជោគជំនះណាស់ ',
+
+'	ធម្មតា	
+មានសំណាងល្អណាស់ក៏មានសំណាងអក្រក់ដែរ ',
+
+'	អាក្រក់	
+ការងាររកស៊ីខាតបង់ឱកាស អស់ទ្រព្យសម្បត្តិ ',
+
+'	ល្អ	
+ពិបាកមុនស្រណុកក្រោយ ',
+
+'	ធម្មតា	
+លាភមានបង់មិនអាចស្តុកស្តម្ភ',
+
+'	ធម្មតា	
+អនាគតមិនសូវភ្លឺស្វាងទេហើយក៏មិនសូវមានទ្រព្យសម្បត្តិដែរ ',
+
+'	អាក្រក់	
+បានហើយតែប្រែជាខាតបង់ទៅវិញខិតខំឥតប្រយោជន៍',
+'	ល្អណាស់	
+អាចទទួលបានជោគជ័យច្រើន'
+    ];
+    // pick theme and advice by index
+   
+    $a = $advice[($n-1) % count($advice)];
+    return "លេខ $n —  លទ្ធិផល៖ $a";
+}
+
+// Server-side processing
+$error = '';
+$resultIndex = null;
+$last6 = '';
+$raw = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $raw = $_POST['phone'] ?? '';
+    // keep digits only
+    $digits = preg_replace('/\D+/', '', $raw);
+    if ($digits === '') {
+        $error = 'សូមបញ្ចូលលេខទូរស័ព្ទ (តែលេខប៉ុណ្ណោះ)។';
+    } else {
+        $last6 = (strlen($digits) > 6) ? substr($digits, -6) : $digits;
+        // compute index: remainder mod 80, map 0->80
+        $num = (int)$last6;
+        $rem = $num % 80;
+        $resultIndex = ($rem === 0) ? 80 : $rem;
+        // If original input had any non-digit characters -> show strict message
+        if (preg_replace('/[0-9]/', '', $raw) !== '') {
+            // preserve behavior: show message that only digits allowed
+            $error = 'បញ្ចូលបានតែលេខប៉ុណ្ណោះ';
+        }
+    }
+}
+?>
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lucky Phone Number Horoscope</title>
+<style>
+:root{
+  --bg1: #0f172a;
+  --card: #0b1220;
+  --accent: #7c3aed;
+  --accent-2: #06b6d4;
+  --glass: rgba(255,255,255,0.06);
+  --muted: #94a3b8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: radial-gradient(1000px 600px at 10% 10%, rgba(124,58,237,0.12), transparent),
+              radial-gradient(1000px 600px at 90% 90%, rgba(6,182,212,0.08), transparent),
+              linear-gradient(180deg,#071028 0%, #061226 100%);
+  font-family: "Noto Sans Khmer", "Khmer OS", system-ui, Arial, sans-serif;
+  color:#e6eef8;
+  padding:28px;
+}
+
+/* Card */
+.container{
+  width:100%;
+  max-width:980px;
+  border-radius:14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  box-shadow: 0 8px 40px rgba(2,6,23,0.6);
+  padding:20px;
+  border: 1px solid rgba(255,255,255,0.03);
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:18px;
+}
+
+/* Left: form + description */
+.left{
+  padding:18px;
+}
+
+.brand{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin-bottom:12px;
+}
+.logo{
+  width:46px;height:46px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:18px;
+  box-shadow:0 6px 20px rgba(124,58,237,0.2);
+}
+h1{margin:0;font-size:1.1rem}
+.lead{color:var(--muted);margin-top:6px;font-size:0.95rem}
+
+/* form */
+.form{
+  margin-top:12px;
+  display:flex;gap:8px;align-items:center;
+}
+.input{
+  flex:1;
+  position:relative;
+}
+.input input[type="text"]{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: #e6eef8;
+  font-size:15px;
+  outline:none;
+  transition: box-shadow .18s, border-color .15s;
+}
+.input input[type="text"]:focus{
+  box-shadow: 0 6px 20px rgba(124,58,237,0.12);
+  border-color: rgba(124,58,237,0.6);
+}
+
+/* buttons */
+.controls{display:flex;gap:8px;margin-top:8px}
+.btn{
+  padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600;
+}
+.btn.primary{
+  background: linear-gradient(90deg,var(--accent),#4f46e5); color:white;
+  box-shadow: 0 8px 30px rgba(79,70,229,0.16);
+}
+.btn.ghost{
+  background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);
+}
+
+/* message box */
+.msg{
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:8px;
+  display:none;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+}
+.msg.error{
+  background: linear-gradient(90deg, rgba(231,76,60,0.12), rgba(255,255,255,0.02));
+  border:1px solid rgba(231,76,60,0.18);
+  color:#ffdddd;
+  display:flex;
+}
+
+/* result */
+.result{
+  margin-top:14px;
+  padding:12px;
+  border-radius:12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+}
+.big{
+  font-size:44px;font-weight:800;color:#ffd166;margin-top:6px;
+  text-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+.small{color:var(--muted);margin-top:6px}
+
+/* Right: grid 1..80 */
+.right{
+  padding:18px;
+  border-left:1px dashed rgba(255,255,255,0.02);
+}
+.grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:8px;
+  max-height:640px;
+  overflow:auto;
+  padding-right:8px;
+}
+.cell{
+  padding:10px;border-radius:10px;background:var(--glass);text-align:center;font-weight:700;color:#cfe8ff;
+  font-size:14px;border:1px solid rgba(255,255,255,0.02);
+}
+.cell.active{
+  background: linear-gradient(90deg,#fef3c7,#ffd166);
+  color:#0b1220;
+  transform: scale(1.03);
+  box-shadow: 0 10px 40px rgba(255,209,102,0.14);
+}
+
+/* footer */
+.footer{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+
+/* responsive */
+@media (max-width:980px){
+  .container{grid-template-columns: 1fr; padding:14px}
+  .right{border-left:none;border-top:1px dashed rgba(255,255,255,0.02);margin-top:8px}
+  .grid{grid-template-columns: repeat(4, 1fr)}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns: repeat(2, 1fr)}
+  .big{font-size:34px}
+}
+</style>
+</head>
+<body>
+<div class="container" role="main">
+  <div class="left">
+    <div class="brand">
+      <div class="logo">LP</div>
+      <div>
+        <h1>Lucky Phone Horoscope</h1>
+        <div class="lead">បញ្ចូលលេខទូរស័ព្ទ (តែលេខ) — វិធីគណនា: ៦ ខ្ទងចុង → %80 → ល.1–80</div>
+      </div>
+    </div>
+
+    <form id="frm" method="post" novalidate>
+      <div class="form">
+        <div class="input">
+          <input id="phone" name="phone" type="text" inputmode="numeric" autocomplete="tel"
+                 placeholder="ឧ. 0123456789" value="<?php echo esc($raw); ?>">
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn primary" type="submit">គណនា</button>
+        <button class="btn ghost" type="button" id="clearBtn">លុប</button>
+        <button class="btn ghost" type="button" id="toggleGrid">បង្ហាញ/លាក់ តារាង (1-80)</button>
+      </div>
+
+      <!-- client-side message box shown when non-digit typed -->
+      <div id="clientMsg" class="msg error" role="alert" aria-live="assertive" style="display:none;">
+        បញ្ចូលបានតែលេខប៉ុណ្ណោះ
+      </div>
+
+      <!-- server-side message -->
+      <?php if ($error): ?>
+        <div class="msg error" style="display:flex;margin-top:10px;">
+          <?php echo esc($error); ?>
+        </div>
+      <?php endif; ?>
+
+      <!-- server-side result -->
+      <?php if ($resultIndex !== null): ?>
+        <div class="result" aria-live="polite">
+          <div class="small">លេខដែលយក (6 ខ្ទង់ចុង): <strong><?php echo esc($last6); ?></strong></div>
+          <div class="big"><?php echo esc($resultIndex); ?></div>
+          <div class="small"><?php echo esc(horoscope_for($resultIndex)); ?></div>
+        </div>
+      <?php endif; ?>
+    </form>
+  </div>
+
+  <div class="right">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-weight:700">តារាងលទ្ធផល 1 → 80</div>
+      <div style="color:var(--muted);font-size:13px">Highlight លេខដែលបានគណនា</div>
+    </div>
+
+    <div id="grid" class="grid" aria-hidden="<?php echo ($resultIndex===null ? 'true' : 'false'); ?>">
+      <?php for($i=1;$i<=80;$i++): 
+           $cls = ($resultIndex !== null && $i == $resultIndex) ? 'cell active' : 'cell';
+           // short label
+           $label = "Lucky #$i";
+      ?>
+        <div class="<?php echo $cls; ?>" data-index="<?php echo $i; ?>"><?php echo $i; ?><div style="font-weight:600;font-size:12px;color:inherit;margin-top:6px;"><?php echo $label;?></div></div>
+      <?php endfor; ?>
+    </div>
+    <div class="footer">ប្រើសម្រាប់កម្សាន្តតែប៉ុណ្ណោះ — Lucky Phone System</div>
+  </div>
+</div>
+
+<script>
+// Client-side behavior: prevent letters, show message box when letters entered
+const phoneInput = document.getElementById('phone');
+const clientMsg = document.getElementById('clientMsg');
+const clearBtn = document.getElementById('clearBtn');
+const toggleGridBtn = document.getElementById('toggleGrid');
+const grid = document.getElementById('grid');
+
+function showClientMsg(){
+  clientMsg.style.display = 'flex';
+  // auto-hide after 2.6s
+  clearTimeout(clientMsg._t);
+  clientMsg._t = setTimeout(()=> clientMsg.style.display='none', 2600);
+}
+
+phoneInput.addEventListener('input', (e) => {
+  const val = phoneInput.value;
+  // if contains any non-digit (letters or symbols), show message and strip them
+  if (/\D/.test(val)) {
+    showClientMsg();
+    // remove non-digits
+    const cleaned = val.replace(/\D+/g, '');
+    phoneInput.value = cleaned;
+  }
+});
+
+// Clear button
+clearBtn.addEventListener('click', () => {
+  phoneInput.value = '';
+  clientMsg.style.display = 'none';
+  // remove active highlight
+  document.querySelectorAll('.cell.active').forEach(c => c.classList.remove('active'));
+});
+
+// Toggle grid visibility
+toggleGridBtn.addEventListener('click', () => {
+  if (grid.style.display === 'none') {
+    grid.style.display = 'grid';
+    grid.setAttribute('aria-hidden','false');
+  } else {
+    grid.style.display = (grid.style.display === '') ? 'none' : '';
+    grid.setAttribute('aria-hidden', grid.style.display === 'none' ? 'true' : 'false');
+  }
+});
+
+// When clicking a grid cell, copy number to input (nice UX)
+document.querySelectorAll('.cell').forEach(cell => {
+  cell.addEventListener('click', () => {
+    const idx = cell.getAttribute('data-index');
+    phoneInput.value = String(idx).padStart(6, '0'); // fill 6-digits for demo
+    phoneInput.focus();
+    // show message briefly
+    showClientMsg();
+  });
+});
+</script>
+</body>
+</html>

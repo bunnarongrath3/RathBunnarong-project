@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="style.css">
+   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>index-404</title>
+</head>
+<body>
+    <header class="header">
+
+        <a href="#home" class="logo">
+            Rath <span>Bunnarong</span>
+        </a>
+            <i class="bx bx-menu" id="menu-icon"></i>
+
+            <nav class="navbar">
+                <a href="#home">Home</a>
+                <a href="#about">about</a>
+                <a href="#execrises">Execrises</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <button class="gradient-btn">Contact Me</button>
+
+    </header>
+    
+    <section class="home" id="home">
+        <div class="home-content">
+            <h1>Hi, It's<span>Rath Bunnarong</span></h1>
+            <h3>I'm a <span>student at Build Bright university</span></h3>
+            <h4>
+                <p></p>
+            </h4>
+        </div>
+        <div class="btn-group">
+            <a href="#contact" class="btn">Contact</a>
+        </div>
+        <div class="home-img"><div class="">
+        <img src="/img/Rong.jpeg" alt="">
+    </section>
+    <section class="about" id="about">
+        <div class="about-img">
+            <img src="./img/Rong.jpeg" alt="">
+        </div>
+        <div class="about-content">
+            <h1>About<span>Me</span></h1>
+        </div>
+    </section>
+    <section class="execrises" id="execrises">
+        <div> 
+            <h1>Execrises</h1>
+        </div>
+        <a href="execrises3.php">គណនាពិន្ទុសិស្ស</a>
+        
+    </section>
+</body>
+</html>
